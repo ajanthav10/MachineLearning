@@ -36,15 +36,16 @@ print(Training_Y.shape)
 
 
 class car:
-    def __init__(self,method="entropy"):#TODO add the depth what to do about user defined depth 
+
+
+    def __init__(self):#TODO add the depth what to do about user defined depth 
 
         #TODO any declartions of instances 
           
     def entropy(self,feature_col): # TODO add in the args name correctly 
-        ''' calculate the entropy 
+        '''calculate the entropy 
         input :- list of indices for a given attribute
-        output :- H = -(p_+)log_2(p_+) - (p_-)log_2(p_-)
-        '''
+        output :- H = -(p_+)log_2(p_+) - (p_-)log_2(p_-)'''
         elements, counts = np.unique(target_col,return_counts = True)
         H = 0
         for i in range(len(elements)):    
