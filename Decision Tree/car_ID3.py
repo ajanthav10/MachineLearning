@@ -7,6 +7,7 @@ from platform import node
 import pandas as pd
 import numpy as np
 from pprint import pprint # might use to print final decision tree
+from tabulate import tabulate
 import matplotlib.pyplot as plt
 # will i need matplotlib ??--> TODO
 
@@ -238,11 +239,27 @@ def test(dataset,category,node):
     for i in range(len(test_data)):
         predicted.loc[i,"predicted"] = predict(queries[i],node,1.0) 
         
-    return np.sum(predicted["predicted"] == category)/len(dataset)*100
-#Train the tree,print the tree abnd predict the accuracy
-tree = ID3(training_data,training_data,training_data.columns[:-1])
-pprint(tree)
-test(testing_data,tree)
+    return np.sum(predicted["predicted"] == category)/len(dataset)
 
 def print()
-#TODO predict and test then print 
+
+for i in range(6):
+    tree=ID3_H(i+1, dataset, Attributes,"labels")
+    train_acc= test(data,Training_Label,tree)
+    test_acc = test(test_data,Test_Label,tree)
+    print("===========Accuracy of DT with Information Gain==========================================")
+    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+
+for i in range(6):
+    tree=ID3_MI(i+1, dataset, Attributes,"labels")
+    train_acc= test(data,Training_Label,tree)
+    test_acc = test(test_data,Test_Label,tree)
+    print("===========Accuracy of DT with Information Gain==========================================")
+    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+
+for i in range(6):
+    tree=ID3_GI(i+1, dataset, Attributes,"labels")
+    train_acc= test(data,Training_Label,tree)
+    test_acc = test(test_data,Test_Label,tree)
+    print("===========Accuracy of DT with Information Gain==========================================")
+    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
