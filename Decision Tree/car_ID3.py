@@ -3,7 +3,6 @@ This code contains the implementation of Decision Tree ID3 algo for UNi of utah 
 Date :17th sept 2022'''
 
 #importing lib required
-from platform import node
 import pandas as pd
 import numpy as np
 from pprint import pprint # might use to print final decision tree
@@ -16,8 +15,8 @@ import matplotlib.pyplot as plt
 # step 1 --load the csv into memory and store it to a data structure
 # DS used is pandas dataframe as it is easier to access 
 
-train_data=pd.read_csv("./car/train.csv",names=['buying','maint','doors','persons','lug_boot','safety','category'])
-test_data=pd.read_csv("./car/test.csv",names=['buying','maint','doors','persons','lug_boot','safety','category'])
+train_data=pd.read_csv("/home/ajantha/Desktop/Repos/MachineLearning/Decision Tree/car/train.csv",names=['buying','maint','doors','persons','lug_boot','safety','category'])
+test_data=pd.read_csv("/home/ajantha/Desktop/Repos/MachineLearning/Decision Tree/car/test.csv",names=['buying','maint','doors','persons','lug_boot','safety','category'])
 # the provided dataset has no names for the features/attributes naming it from desc-txt from zip file 
 # naming the label as label
 
