@@ -24,21 +24,21 @@ test_data=pd.read_csv("/home/ajantha/Desktop/Repos/MachineLearning/Decision Tree
 #y - categorical label 
 # storing the name of all features in list X_features
 X_features=['buying','maint','doors','persons','lug_boot','safety'] # X featues 
-Training_X=train_data['category'] # it is pd.series 
-Training_Y=train_data[X_features] # pd.dataframe
+Training_Y=train_data['category'] # it is pd.series 
+Training_X=train_data[X_features] # pd.dataframe
 #similarly splitting the X and Y from test dataset
-Test_X=test_data['category']
-Test_Y=test_data[X_features] 
-print(type(Training_X))
-print(type(Training_Y))
-print(Training_X.shape)
-print(Training_Y.shape)
+Test_Y=test_data['category']
+Test_X=test_data[X_features] 
+#print(type(Training_X))
+#print(type(Training_Y))
+#print(Training_X.shape)
+#print(Training_Y.shape)
 
 
 class car:
 
 
-    def __init__(self):#TODO add the depth what to do about user defined depth 
+    #def __init__(self):#TODO add the depth what to do about user defined depth 
 
         #TODO any declartions of instances 
           
@@ -50,6 +50,7 @@ class car:
         H = 0
         for i in range(len(elements)):    
             p_i = counts[i]/np.sum(counts)
+            #print(here)
             H += -p_i*np.log2(p_i)    
         return H
     def majority_error(self,feature_col): # TODO add in the args name correctly 
@@ -138,13 +139,13 @@ class car:
         elif len(X_features)==0:       
              return common_label
         else:
-            for features in X_features
+            for features in X_features:
                 X_featuresIG=[ IG_H(dataset,features,category) for features in X_features]
             best_split_attribute = X_featuresIG[np.argmax(attr_values)]
             # obtaning te highest ig value attribute 
             node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
 
-            for v in np.unique(dataset[best_split_attribute])
+            for v in np.unique(dataset[best_split_attribute]):
                 # now when the value of best_split_attribute is equal to each value then create subdata 
                 # subdata - pd dataframe 
                 sub_dataset= dataset[dataset[best_split_attribute]== v]
@@ -168,13 +169,13 @@ class car:
         elif len(X_features)==0:       
              return common_label
         else:
-            for features in X_features
+            for features in X_features:
                 X_featuresIG=[ IG_ME(dataset,features,category) for features in X_features]
             best_split_attribute = X_featuresIG[np.argmax(attr_values)]
             # obtaning te highest ig value attribute 
             node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
 
-            for v in np.unique(dataset[best_split_attribute])
+            for v in np.unique(dataset[best_split_attribute]):
                 # now when the value of best_split_attribute is equal to each value then create subdata 
                 # subdata - pd dataframe 
                 sub_dataset= dataset[dataset[best_split_attribute]== v]
@@ -190,7 +191,7 @@ class car:
         return node   
 
         
-    def ID3_GI(self,depth,data,category,X_features)
+    def ID3_GI(self,depth,data,category,X_features):
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
@@ -198,13 +199,13 @@ class car:
         elif len(X_features)==0:       
              return common_label
         else:
-            for features in X_features
+            for features in X_features:
                 X_featuresIG=[ IG_GI(dataset,features,category) for features in X_features]
             best_split_attribute = X_featuresIG[np.argmax(attr_values)]
             # obtaning te highest ig value attribute 
             node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
 
-            for v in np.unique(dataset[best_split_attribute])
+            for v in np.unique(dataset[best_split_attribute]):
                 # now when the value of best_split_attribute is equal to each value then create subdata 
                 # subdata - pd dataframe 
                 sub_dataset= dataset[dataset[best_split_attribute]== v]
@@ -243,25 +244,25 @@ def test(dataset,category,node):
 
 def print(self):
 
-for i in range(6):
-    tree=ID3_H(i+1, dataset, Attributes,"labels")
-    train_acc= test(data,Training_Label,tree)
-    test_acc = test(test_data,Test_Label,tree)
-    print("===========Accuracy of DT with Information Gain==========================================")
-    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+    for i in range(6):
+        tree=ID3_H(i+1, dataset, Attributes,"labels")
+        train_acc= test(data,Training_Label,tree)
+        test_acc = test(test_data,Test_Label,tree)
+        print("===========Accuracy of DT with Information Gain==========================================")
+        print("Depth is",i+1 ,'Training acc is', train_acc, 'and testing_acc is' , test_acc)
 
-for i in range(6):
-    tree=ID3_MI(i+1, dataset, Attributes,"labels")
-    train_acc= test(data,Training_Label,tree)
-    test_acc = test(test_data,Test_Label,tree)
-    print("===========Accuracy of DT with Information Gain==========================================")
-    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+    for i in range(6):
+        tree=ID3_MI(i+1, dataset, Attributes,"labels")
+        train_acc= test(data,Training_Label,tree)
+        test_acc = test(test_data,Test_Label,tree)
+        print("===========Accuracy of DT with Information Gain==========================================")
+        print("Depth is",i+1 ,'Training acc is', train_acc ,'and testing_acc is' , test_acc)
 
-for i in range(6):
-    tree=ID3_GI(i+1, dataset, Attributes,"labels")
-    train_acc= test(data,Training_Label,tree)
-    test_acc = test(test_data,Test_Label,tree)
-    print("===========Accuracy of DT with Information Gain==========================================")
-    print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+    for i in range(6):
+        tree=ID3_GI(i+1, dataset, Attributes,"labels")
+        train_acc= test(data,Training_Label,tree)
+        test_acc = test(test_data,Test_Label,tree)
+        print("===========Accuracy of DT with Information Gain==========================================")
+        print("Depth is",i+1, 'Training acc is', train_acc, 'and testing_acc is' , test_acc)
 
     return 0
