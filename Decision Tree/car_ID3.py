@@ -1,8 +1,9 @@
 '''
 This code contains the implementation of Decision Tree ID3 algo for UNi of utah ML assignment. It was implemented by me to keep it as generic as possible
-Date :21st sept 2022'''
+Date :17th sept 2022'''
 
 #importing lib required
+from platform import node
 import pandas as pd
 import numpy as np
 from pprint import pprint # might use to print final decision tree
@@ -133,7 +134,7 @@ class car:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
         #step 2 : if attributes empty return a leaf node 
-        else if len(X_features)==0:       
+        elif len(X_features)==0:       
              return common_label
         else:
             for features in X_features
@@ -158,12 +159,12 @@ class car:
         return node
 
 
-    def ID3_ME((self,depth,data,category,X_features)
+    def ID3_ME(self,depth,data,category,X_features)
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
         #step 2 : if attributes empty return a leaf node 
-        else if len(X_features)==0:       
+        elif len(X_features)==0:       
              return common_label
         else:
             for features in X_features
@@ -188,12 +189,12 @@ class car:
         return node   
 
         
-    def ID3_GI((self,depth,data,category,X_features)
+    def ID3_GI(self,depth,data,category,X_features)
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
         #step 2 : if attributes empty return a leaf node 
-        else if len(X_features)==0:       
+        elif len(X_features)==0:       
              return common_label
         else:
             for features in X_features
@@ -216,6 +217,32 @@ class car:
                 subtree=ID3_GI(depth-1,sub_dataset,X_features,category)
                 node[best_split_attribute][v]=subtree
         return node
-        
+#Predict
+def predict(query,tree,default=1):
+    for key in list(query.keys()):
+        if key in list(tree.keys()):
+            try:
+               result = node[key][query[key]]
+            except:
+               return default
 
+            result = node[key][query[key]]
+            if isinstance(result,dict):
+                return predict(query,result)
+            else:
+                return result
+def test(dataset,category,node):
+    queries = data.iloc[:,:-1].to_dict(orient = "records")
+    predicted = pd.DataFrame(columns=["predicted"]) 
+    
+    for i in range(len(test_data)):
+        predicted.loc[i,"predicted"] = predict(queries[i],node,1.0) 
+        
+    return np.sum(predicted["predicted"] == category)/len(dataset)*100
+#Train the tree,print the tree abnd predict the accuracy
+tree = ID3(training_data,training_data,training_data.columns[:-1])
+pprint(tree)
+test(testing_data,tree)
+
+def print()
 #TODO predict and test then print 
