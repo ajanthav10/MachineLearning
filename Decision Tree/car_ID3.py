@@ -6,8 +6,8 @@ Date :17th sept 2022'''
 import pandas as pd
 import numpy as np
 from pprint import pprint # might use to print final decision tree
-from tabulate import tabulate
-import matplotlib.pyplot as plt
+#from tabulate import tabulate
+#import matplotlib.pyplot as plt
 # will i need matplotlib ??--> TODO
 
 
