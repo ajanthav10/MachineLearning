@@ -71,7 +71,7 @@ class car:
         for i in range(len(elements)):    
             GI-=pow((counts[i]/np.sum(counts)),2)
         return GI
-    def IG_H(self,dataset,X_features)    
+    def IG_H(self,dataset,X_features): 
         #total entropy is calculated using the whole dataset and all the labels 
         total_entropy=entropy(dataset[category])
         attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)
@@ -85,7 +85,7 @@ class car:
 
         return IG_H
 
-    def IG_ME(self,dataset,attributes)     
+    def IG_ME(self,dataset,attributes):     
         total_ME = majority_error(dataset[category])
         attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)        
         attr_majorityerror= 0 
@@ -97,7 +97,7 @@ class car:
 
         return IG_ME
    
-    def IG_GI(self,dataset,attributes)   
+    def IG_GI(self,dataset,attributes):
         total_GI = Gini_index(dataset[category])
         attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)        
         attr_GI= 0 
@@ -110,7 +110,7 @@ class car:
         return IG_GI
 
 
-    def most_common_category(self,dataset,category) # TODO args need Y label 
+    def most_common_category(self,dataset,category):# TODO args need Y label 
         '''to find the most common label among the dataset . Might be required when no of features =0 or 
         when all examples have same label
         input :- dataset which is pd.dataframe 
@@ -124,7 +124,7 @@ class car:
 
 
 
-    def ID3_H(self,depth,data,category,X_features)
+    def ID3_H(self,depth,data,category,X_features):
         '''construct DT using Entropy as measure to get information gain
         Need to calc total entropy and entropy for each feature then subdata for the root node.
         input:data- pd dataframe, attributes- list and x_features - pd series , depth - to be max as no of attributes 
@@ -160,7 +160,7 @@ class car:
         return node
 
 
-    def ID3_ME(self,depth,data,category,X_features)
+    def ID3_ME(self,depth,data,category,X_features):
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
@@ -241,7 +241,7 @@ def test(dataset,category,node):
         
     return np.sum(predicted["predicted"] == category)/len(dataset)
 
-def print()
+def print(self):
 
 for i in range(6):
     tree=ID3_H(i+1, dataset, Attributes,"labels")
@@ -263,3 +263,5 @@ for i in range(6):
     test_acc = test(test_data,Test_Label,tree)
     print("===========Accuracy of DT with Information Gain==========================================")
     print("Depth is",i+1 'Training acc is', train_acc 'and testing_acc is' , test_acc)
+
+    return 0
