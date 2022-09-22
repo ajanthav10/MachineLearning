@@ -34,7 +34,7 @@ print(Training_X.shape)
 print(Training_Y.shape)
 
 
-class bestsplit_attribute:
+class car:
     def __init__(self,method="entropy"):#TODO add the depth what to do about user defined depth 
 
         #TODO any declartions of instances 
@@ -69,19 +69,38 @@ class bestsplit_attribute:
         for i in range(len(elements)):    
             GI-=pow((counts[i]/np.sum(counts)),2)
         return GI
-    def IG_H(self,dataset,attributes)    
+    def IG_H(self,dataset,X_features)    
+        #total entropy is calculated using the whole dataset and all the labels of it
+        H_S=entropy(data[category])
+        attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)
+        # getting the values of each attributes and calc entropy of each
+        attr_Hv= 0 
+        for i in range(len(attr_values)):
+            #getting subdata as pd.dataframe and calc entropy for the same 
+            sub_data= dataset[dataset[X_features]==attr_values[i]]
+            attr_Hv += attr_counts[i]/np.sum(attr_counts)*entropy(sub_data[category])
 
-        return IG
-    def IG_ME(self,dataset,attributes)          
+        IG_H = H_S - attr_Hv
+        return IG_H
+
+    def IG_ME(self,dataset,attributes)     
+
+
         return IG_ME
-    def IG_GI(self,dataset,attributes)          
+
+
+    def IG_GI(self,dataset,attributes)   
+
+
         return IG_GI
-    def most_common_category(self,data,category) # TODO args need Y label 
+
+
+    def most_common_category(self,dataset,category) # TODO args need Y label 
         '''to find the most common label among the dataset . Might be required when no of features =0 or 
         when all examples have same label
         input :- dataset which is pd.dataframe 
         output:- most_common_category (str) - as label are categorical'''
-        X_features,attr_counts=np.unique(data[category],return_counts=True)
+        X_features,attr_counts=np.unique(dataset[category],return_counts=True)
         #X_features and attr_counts - np array with same size 
         # attr_counts represents the count of each element in X_features
         #using argmax to get the index of label which is most repeated/common 
@@ -96,20 +115,37 @@ class bestsplit_attribute:
         '''
 
         # step 1 calc the total entropy for whole dataset with respect to categorical label(Y)
-        H_S=entropy(data[categorical])
+        H_S=entropy(dataset[categorical])
 
         #Step 2 :- according to ID3, if all the attributes have same label then return leaf node with the label
-        if len(np.unique(data[category]))<=1:
-            return common_label # TODO np.unique(data[category])[0]  check common label or this 
+        if len(np.unique(dataset[category]))<=1:
+            return most_common_category # TODO np.unique(data[category])[0]  check common label or this 
         #step 3 : if attributes empty return a leaf node 
         else if len(X_features)==0:
-            return common_label
-        else:
-            for features in X_features
+            return most_common_category
+        else: # select a root node which best splits the dataset using Infogain
+            for features in X_features: 
+                Hv_values=[IG_H() for features in X_features] # TODO does this second for loop is required ??
+            best_split_attribute=X_features[np.argmax(Hv_values)]
+            
+            #out of 6 features now found the best split attribute and it is stored in dict as root node 
+            node ={best_split_attribute:{}} # created a nested dictionary to hold the DT DS
 
-        #
+            # now from the values of best_split_attribute add a branch and find subdata 
+            for v in np.unique(dataset[best_split_attribute])
+                # now when the value of best_split_attribute is equal to each value then create subdata 
+                # subdata - pd dataframe 
+                sub_dataset= dataset[dataset[best_split_attribute]== v]
+                # get the most common label for the subdata 
+                sub_dataset_commonlabel= most_common_category(sub_dataset,label)
+
+            if len(sub_dataset)==0 or depth==1:
+                node[best_split_attribute][v] = sub_dataset_common_label
+
+            else:
+                subtree=ID3_depth_entropy(depth-1,sub_dataset,X_features,category)
+                node[best_split_attribute][v]=subtree
         return node
-
     def ID3_ME()
         return node
     
