@@ -70,27 +70,40 @@ class car:
             GI-=pow((counts[i]/np.sum(counts)),2)
         return GI
     def IG_H(self,dataset,X_features)    
-        #total entropy is calculated using the whole dataset and all the labels of it
-        H_S=entropy(data[category])
+        #total entropy is calculated using the whole dataset and all the labels 
+        total_entropy=entropy(dataset[category])
         attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)
         # getting the values of each attributes and calc entropy of each
-        attr_Hv= 0 
+        attr_entropy= 0 
         for i in range(len(attr_values)):
             #getting subdata as pd.dataframe and calc entropy for the same 
             sub_data= dataset[dataset[X_features]==attr_values[i]]
             attr_Hv += attr_counts[i]/np.sum(attr_counts)*entropy(sub_data[category])
+        IG_H = total_entropy - attr_entropy
 
-        IG_H = H_S - attr_Hv
         return IG_H
 
     def IG_ME(self,dataset,attributes)     
-
+        total_ME = majority_error(dataset[category])
+        attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)        
+        attr_majorityerror= 0 
+        for i in range(len(attr_counts)):
+            sub_data= dataset[dataset[X_features]==attr_counts[i]]
+            attr_majorityerror += attr_counts[i]/np.sum(attr_counts)*majority_error(sub_data[category])
+        
+        IG_ME = total_ME - attr_majorityerror
 
         return IG_ME
-
-
+   
     def IG_GI(self,dataset,attributes)   
-
+        total_GI = Gini_index(dataset[category])
+        attr_values,attr_counts = np.unique(dataset[X_features],return_counts=True)        
+        attr_GI= 0 
+        for i in range(len(attr_counts)):
+            sub_data= dataset[dataset[X_features]==attr_counts[i]]
+            attr_GI += attr_counts[i]/np.sum(attr_counts)*Gini_index(sub_data[category])
+        
+        IG_GI = total_GI - attr_GI
 
         return IG_GI
 
@@ -113,25 +126,20 @@ class car:
         input:data- pd dataframe, attributes- list and x_features - pd series , depth - to be max as no of attributes 
         output: create tree and store it in dict TODO - any other DS possible and how to draw the DT
         '''
-
-        # step 1 calc the total entropy for whole dataset with respect to categorical label(Y)
-        H_S=entropy(dataset[categorical])
-
-        #Step 2 :- according to ID3, if all the attributes have same label then return leaf node with the label
+        #Step 1 :- according to ID3, if all the attributes have same label then return leaf node with the label
         if len(np.unique(dataset[category]))<=1:
-            return most_common_category # TODO np.unique(data[category])[0]  check common label or this 
-        #step 3 : if attributes empty return a leaf node 
-        else if len(X_features)==0:
-            return most_common_category
-        else: # select a root node which best splits the dataset using Infogain
-            for features in X_features: 
-                Hv_values=[IG_H() for features in X_features] # TODO does this second for loop is required ??
-            best_split_attribute=X_features[np.argmax(Hv_values)]
-            
-            #out of 6 features now found the best split attribute and it is stored in dict as root node 
-            node ={best_split_attribute:{}} # created a nested dictionary to hold the DT DS
+            common_label=most_common_category(dataset,category)
+            return common_label # TODO np.unique(data[category])[0]  check common label or this 
+        #step 2 : if attributes empty return a leaf node 
+        else if len(X_features)==0:       
+             return common_label
+        else:
+            for features in X_features
+                X_featuresIG=[ IG_H(dataset,features,category) for features in X_features]
+            best_split_attribute = X_featuresIG[np.argmax(attr_values)]
+            # obtaning te highest ig value attribute 
+            node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
 
-            # now from the values of best_split_attribute add a branch and find subdata 
             for v in np.unique(dataset[best_split_attribute])
                 # now when the value of best_split_attribute is equal to each value then create subdata 
                 # subdata - pd dataframe 
@@ -143,11 +151,63 @@ class car:
                 node[best_split_attribute][v] = sub_dataset_common_label
 
             else:
-                subtree=ID3_depth_entropy(depth-1,sub_dataset,X_features,category)
+                subtree=ID3_H(depth-1,sub_dataset,X_features,category)
                 node[best_split_attribute][v]=subtree
         return node
     def ID3_ME()
-        return node
-    
+        if len(np.unique(dataset[category]))<=1:
+            common_label=most_common_category(dataset,category)
+            return common_label # TODO np.unique(data[category])[0]  check common label or this 
+        #step 2 : if attributes empty return a leaf node 
+        else if len(X_features)==0:       
+             return common_label
+        else:
+            for features in X_features
+                X_featuresIG=[ IG_ME(dataset,features,category) for features in X_features]
+            best_split_attribute = X_featuresIG[np.argmax(attr_values)]
+            # obtaning te highest ig value attribute 
+            node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
+
+            for v in np.unique(dataset[best_split_attribute])
+                # now when the value of best_split_attribute is equal to each value then create subdata 
+                # subdata - pd dataframe 
+                sub_dataset= dataset[dataset[best_split_attribute]== v]
+                # get the most common label for the subdata 
+                sub_dataset_commonlabel= most_common_category(sub_dataset,label)
+
+            if len(sub_dataset)==0 or depth==1:
+                node[best_split_attribute][v] = sub_dataset_common_label
+
+            else:
+                subtree=ID3_ME(depth-1,sub_dataset,X_features,category)
+                node[best_split_attribute][v]=subtree
+        return node   
     def ID3_GI()
+        if len(np.unique(dataset[category]))<=1:
+            common_label=most_common_category(dataset,category)
+            return common_label # TODO np.unique(data[category])[0]  check common label or this 
+        #step 2 : if attributes empty return a leaf node 
+        else if len(X_features)==0:       
+             return common_label
+        else:
+            for features in X_features
+                X_featuresIG=[ IG_GI(dataset,features,category) for features in X_features]
+            best_split_attribute = X_featuresIG[np.argmax(attr_values)]
+            # obtaning te highest ig value attribute 
+            node = {best_split_attribute:{}} # storing the attribute and its vau in nested dict for creating a Decision tree
+
+            for v in np.unique(dataset[best_split_attribute])
+                # now when the value of best_split_attribute is equal to each value then create subdata 
+                # subdata - pd dataframe 
+                sub_dataset= dataset[dataset[best_split_attribute]== v]
+                # get the most common label for the subdata 
+                sub_dataset_commonlabel= most_common_category(sub_dataset,label)
+
+            if len(sub_dataset)==0 or depth==1:
+                node[best_split_attribute][v] = sub_dataset_common_label
+
+            else:
+                subtree=ID3_GI(depth-1,sub_dataset,X_features,category)
+                node[best_split_attribute][v]=subtree
         return node
+        
