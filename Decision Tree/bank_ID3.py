@@ -23,7 +23,7 @@ test_data=pd.read_csv("/home/ajantha/Desktop/Repos/MachineLearning/Decision Tree
 #step 2 split dataset into X and Y for computation purpose where x- features Y- label
 #y - categorical label 
 # storing the name of all features in list X_features
-X_features=['Age','Job','Marital','Education','Default','Balance','Housing','Loan','Contact','Day','Month','Duration','Campaign','Pdays','Previous','Poutcome','Label'] # X featues 
+X_features=['Age','Job','Marital','Education','Default','Balance','Housing','Loan','Contact','Day','Month','Duration','Campaign','Pdays','Previous','Poutcome','category'] # X featues 
 Training_Y=train_data['category'] # it is pd.series 
 Training_X=train_data[X_features] # pd.dataframe
 #similarly splitting the X and Y from test dataset
