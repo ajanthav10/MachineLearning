@@ -120,6 +120,8 @@ class car:
         most_common_category=X_features[np.argmax(attr_counts)]
         return most_common_category
 
+
+
     def ID3_H(self,depth,data,category,X_features)
         '''construct DT using Entropy as measure to get information gain
         Need to calc total entropy and entropy for each feature then subdata for the root node.
@@ -154,7 +156,9 @@ class car:
                 subtree=ID3_H(depth-1,sub_dataset,X_features,category)
                 node[best_split_attribute][v]=subtree
         return node
-    def ID3_ME()
+
+
+    def ID3_ME((self,depth,data,category,X_features)
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
@@ -182,7 +186,9 @@ class car:
                 subtree=ID3_ME(depth-1,sub_dataset,X_features,category)
                 node[best_split_attribute][v]=subtree
         return node   
-    def ID3_GI()
+
+        
+    def ID3_GI((self,depth,data,category,X_features)
         if len(np.unique(dataset[category]))<=1:
             common_label=most_common_category(dataset,category)
             return common_label # TODO np.unique(data[category])[0]  check common label or this 
@@ -211,3 +217,5 @@ class car:
                 node[best_split_attribute][v]=subtree
         return node
         
+
+#TODO predict and test then print 
