@@ -1,6 +1,8 @@
 '''
 This code contains the implementation of Decision Tree ID3 algo for UNi of utah ML assignment. It was implemented by me to keep it as generic as possible
-Date :17th sept 2022'''
+Date :17th sept 2022
+References from Online : https://www.youtube.com/watch?v=K5QlpAqOtTE
+https://medium.com/geekculture/step-by-step-decision-tree-id3-algorithm-from-scratch-in-python-no-fancy-library-4822bbfdd88f'''
 #importing lib required
 import numpy as np
 import pandas as pd
@@ -47,7 +49,10 @@ def GI(feature_col):
     
 
 def IG_H(data,attribute,label_name):
-
+    '''calculating IG using Entropy
+    input - total Entropy and indices of given attribute
+    output - inforgain
+    '''
     #total entropy is calculated using the whole dataset and all the labels
     total_entropy = H(data[label_name])
     values, counts = np.unique(data[attribute],return_counts=True)
@@ -63,6 +68,10 @@ def IG_H(data,attribute,label_name):
     return IG
 
 def IG_ME(data,attribute,label_name):
+    '''calculating IG using majority error
+    input - total majority error and indices of given attribute
+    output - inforgain
+    '''
     total_m_err = ME(data[label_name])
     values, counts = np.unique(data[attribute],return_counts=True)
     
