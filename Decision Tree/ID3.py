@@ -223,121 +223,45 @@ def test(data,label,tree):
         
     return np.sum(predicted["predicted"] == label)/len(data)
 
-def conv_num_to_bi(data,test_data, target_head="class"):
-    med_d = data[target_head].median()
-    min_d = data[target_head].min()
-    max_d = data[target_head].max()
-    bins = [min_d-1,med_d,max_d]
-    data[target_head]=pd.cut(data[target_head],bins,labels=[0,1]) 
-    test_data[target_head]=pd.cut(test_data[target_head],bins,labels=[0,1])
 
-def Common_value(data, label="class"):
-    """ data : given dataset
-        label: title of the label"""
-    feature, f_count = np.unique(data[label],return_counts= True)
-    max_count= np.argmax(f_count)
-    if feature[max_count]=="unknown":
-        f_count[max_count]=0
-        common_label= feature[np.argmax(f_count)]
-    else: 
-        common_label = feature[max_count]
-        
-    
-    return common_label
+
 def main():    
-     
-    Head= ['Age','Job','Marital','Education','Default','Balance','Housing','Loan','Contact','Day','Month','Duration','Campaign','Pdays','Previous','Poutcome','Label']
-    data=pd.read_csv('./bank/train.csv',names=Head)
-    test_data=pd.read_csv('./bank/test.csv',names= Head)
-    
-
-
-    conv_num_to_bi(data,test_data,"Age")
-    conv_num_to_bi(data,test_data,"Balance")
-    conv_num_to_bi(data,test_data,"Day")
-    conv_num_to_bi(data,test_data,"Duration")
-    conv_num_to_bi(data,test_data,"Campaign")
-    conv_num_to_bi(data,test_data,"Pdays")
-    conv_num_to_bi(data,test_data,"Previous")
-
-    Attributes= ['Age','Job','Marital','Education','Default','Balance','Housing','Loan','Contact','Day','Month','Duration','Campaign','Pdays','Previous','Poutcome']
-    Training_Label= data['Label']
-    Training_Data= data[Attributes]
-
-    Test_Label= test_data['Label']
-    Test_Data= test_data[Attributes]
-    print("-----Problem 3a-------")
-    print("Information Gain")
-    print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_entropy(i+1, data, Attributes,"Label")
-        training_err=1- test(data,Training_Label,tree)
-        testing_err =1- test(test_data,Test_Label,tree)
-        print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
-        
-    print("Majority Error")
-    print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_ME(i+1, data, Attributes,"Label")
-        training_err=1- test(data,Training_Label,tree)
-        testing_err =1- test(test_data,Test_Label,tree)
-        print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
-    print("Gini Index")
-    print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_GI(i+1, data, Attributes,"Label")
-        training_err=1- test(data,Training_Label,tree)
-        testing_err =1- test(test_data,Test_Label,tree)
-        print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
-    
-    
-    com_Job= Common_value(data, label="Job")
-    com_Education= Common_value(data, label="Education")
-    com_Poutcome= Common_value(data, label="Poutcome")
-    com_Contact= Common_value(data, label="Contact")
-
-    data["Poutcome"]=data.Poutcome.replace("unknown", com_Poutcome)
-    data["Job"]=data.Job.replace("unknown", com_Job)
-    data["Education"]=data.Education.replace("unknown", com_Education)
-    data["Contact"]=data.Contact.replace("unknown", com_Contact)
-
-    test_data["Poutcome"]=test_data.Poutcome.replace("unknown", com_Poutcome)
-    test_data["Job"]=test_data.Job.replace("unknown", com_Job)
-    test_data["Education"]=test_data.Education.replace("unknown", com_Education)
-    test_data["Contact"]=test_data.Contact.replace("unknown", com_Contact)
+    # import "car" data 
+    # problem2. 
+    data=pd.read_csv('./car/train.csv',names= ['buying','maint','doors','persons','lug_boot','safety','labels'])
+    test_data=pd.read_csv('./car/test.csv',names= ['buying','maint','doors','persons','lug_boot','safety','labels'])
 
     # Split the data and its labels.
-    Attributes= ['Age','Job','Marital','Education','Default','Balance','Housing','Loan','Contact','Day','Month','Duration','Campaign','Pdays','Previous','Poutcome']
-    Training_Label= data['Label']
+    Attributes= ['buying','maint','doors','persons','lug_boot','safety']
+    Training_Label= data['labels']
     Training_Data= data[Attributes]
 
-    Test_Label= test_data['Label']
+    Test_Label= test_data['labels']
     Test_Data= test_data[Attributes]
 
-    print("-----Problem 3b-------")
+    
     print("Information Gain")
     print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_entropy(i+1, data, Attributes,"Label")
+    for i in range(6):
+        tree=ID3_depth_entropy(i+1, data, Attributes,"labels")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
         print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
         
     print("Majority Error")
     print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_ME(i+1, data, Attributes,"Label")
+    for i in range(6):
+        tree=ID3_depth_ME(i+1, data, Attributes,"labels")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
         print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
     print("Gini Index")
     print("--------------------------------------------------")
-    for i in range(16):
-        tree=ID3_depth_GI(i+1, data, Attributes,"Label")
+    for i in range(6):
+        tree=ID3_depth_GI(i+1, data, Attributes,"labels")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
         print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
     
-
 if __name__ == "__main__":
     main()
