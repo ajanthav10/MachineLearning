@@ -1,66 +1,57 @@
 import numpy as np
 import pandas as pd
 from  matplotlib import pyplot as plt
+from numpy import linalg as lin
 #import csv
 #csv needed to get values for both the test and training accuracy for different iterations
 
-def mean_squared_error(X,Y,W):
-    for i in range(len(X)):
-        squared_error=np.sum((Y[i]-np.dot(W,X[i])))/len(X)
-    return squared_error
+'''def mean_squared_error(X,Y,W):
 
-def gradient_descent(X,Y,learning_rates,threshold=10e-6)
+    squared_error=0
+    for i in range(len(X)):
+        squared_error+=(Y[i] - np.dot(W, X[i]))**2 
+    return squared_error*0.5'''
+
+def mean_squared_error(X,Y,W):
     
-    n = len(x) 
+    squared_error=0
+    y_pred=np.zeros(Y.shape)
+    for i in range(len(X)):
+        y_pred[i]=np.dot(W,X[i])
+        squared_error=(Y[i] -y_pred[i])**2 
+    return squared_error*0.5
+
+'''def mse(w,xy):
+    (x,y) = xy
+    
+    # Compute output
+    # keep in mind that wer're using mse and not mse/m
+    # because it would be relevant to the end result
+    o = np.sum(x*w,axis=1)
+    mse = np.sum((y-o)*(y-o))
+    mse = mse/2
+    return mse    '''
+
+def gradient_descent(X,Y,learning_rates,threshold):#=10e-6'''):
+    
+    n = len(X) 
     costs = []
     current_weight = np.zeros(X.shape[1])
     delta = 0
     new_weight=np.zeros(X.shape[1])
     while(delta>threshold):
-        
+        for i in range(len(X[0])):
+            grad_vector=0
+            for j in range(len(X)):
+                grad_vector+=X[i][j] * (Y[i]-np.dot(current_weight,X[i]))
+            new_weight[j] = -(grad_vector)
+        updated_weight=current_weight-learning_rates*new_weight
+        delta = lin.norm(-new_weight+updated_weight)
+        costs.append(mean_squared_error(X,Y,W))
+        current_weight=updated_weight
 
-    # Estimation of optimal parameters
-    for i in range(iterations):
-         
-        # Making predictions
-        y_predicted = (current_weight * x) + current_bias
-         
-        # Calculationg the current cost
-        current_cost = mean_squared_error(y, y_predicted)
- 
-        # If the change in cost is less than or equal to
-        # stopping_threshold we stop the gradient descent
-        if previous_cost and abs(previous_cost-current_cost)<=stopping_threshold:
-            break
-         
-        previous_cost = current_cost
- 
-        costs.append(current_cost)
-        weights.append(current_weight)
-         
-        # Calculating the gradients
-        weight_derivative = -(2/n) * sum(x * (y-y_predicted))
-        bias_derivative = -(2/n) * sum(y-y_predicted)
-         
-        # Updating weights and bias
-        current_weight = current_weight - (learning_rate * weight_derivative)
-        current_bias = current_bias - (learning_rate * bias_derivative)
-                 
-        # Printing the parameters for each 1000th iteration
-        print(f"Iteration {i+1}: Cost {current_cost}, Weight \
-        {current_weight}, Bias {current_bias}")
-     
-     
-    # Visualizing the weights and cost at for all iterations
-    plt.figure(figsize = (8,6))
-    plt.plot(weights, costs)
-    plt.scatter(weights, costs, marker='o', color='red')
-    plt.title("Cost vs Weights")
-    plt.ylabel("Cost")
-    plt.xlabel("Weight")
-    plt.show()
-     
     return current_weight,costs
+
 
 def main():
     '''DATA PREPROCESSING'''
@@ -77,6 +68,24 @@ def main():
     #print(X_test.shape)
     #print(Y_test.shape)
     #print(Y_train.shape)
+
+    print("********** Part 4(a) **********")
+    print("Batched gradient descent experiment")
+
+    r = 0.01
+    W, costs = gradient_descent(X_train, Y_train,r,10e-6)
+    test_cost_value = mean_squared_error(X_test, Y_test, W)
+    print("Learning rate: ", r)
+    print("The learned weight vector: ", W)
+    print("Test data cost function value: ", test_cost_value)
+    fig1 = plt.figure()
+    plt.plot(costs)
+    fig1.suptitle('Gradient Descent ', fontsize=20)
+    plt.xlabel('iteration', fontsize=18)
+    plt.ylabel('Cost Function Value', fontsize=16)
+    plt.show()
+    fig1.savefig("BGD_cost_function.png")
+    print("Figure has been saved!")
 
 if __name__ == "__main__":
     main()
