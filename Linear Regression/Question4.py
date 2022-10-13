@@ -16,6 +16,8 @@ import argparse
 parser = argparse.ArgumentParser(description='Stochastic Gradient Descent')
 # Add an argument
 parser.add_argument('--r', type=float, required=True, help='learning rate' ,nargs='+')
+parser.add_argument('--lr', type=float, default=0.001,required=False, help='learning rate' ,nargs='+')
+
 # Parse the argument
 args = parser.parse_args()
 # Print "Rate value" + the user input argument
@@ -62,19 +64,13 @@ def gradient_descent(X:np.ndarray, Y:np.ndarray,r:float,threshold):
 def stochastic_gradient_descent(X, Y, r,threshold):
 
 	current_W = np.zeros(X.shape[1])
-
-
 	norm = math.inf
-
 	costs = [mean_square_error(X, Y, current_W)]
-
 	while norm > threshold:
 		i = random.randrange(len(X))
-
 		running_w = np.zeros(X.shape[1])
 		for j in range(len(X[0])): 
 			running_w[j] = X[i][j] *(Y[i] - np.dot(current_W, X[i]))
-
 		updated_W = current_W + r*running_w
 		current_W = updated_W
 		new_cost = mean_square_error(X, Y, current_W) 
@@ -121,10 +117,10 @@ def main():
     fig1.savefig("BGD_cost_function.png")
 
     print("********** Part 4(b) - Implementing stochastic_gradient_descent **********")
-    r = args.r
-    SGD_Weights, SGD_costs = stochastic_gradient_descent(D_train, Y_train,r,10e-10)
+    lr = args.lr
+    SGD_Weights, SGD_costs = stochastic_gradient_descent(D_train, Y_train,lr,10e-10)
     test_SGD_cost_value = mean_square_error(D_test, Y_test, SGD_Weights)
-    print("Learning rate: ", r)
+    print("Learning rate: ", lr)
     print("Learned weight vector: ", SGD_Weights)
     print("Test data cost function value: ", test_SGD_cost_value)
     #storing the results to csv
@@ -142,7 +138,8 @@ def main():
     fig1.savefig("BGD_cost_function.png")
 
     print("********** Part 4(c)  Optimal weight vector with analytical form**********")
-    analytical_w=np.matmul(inv(D_train,D_train.T),D_train,Y_train)
+    temp=np.matmul(D_train,D_train.T)
+    analytical_w=np.matmul(inv(temp),D_train,Y_train)
     test_cost_value = mean_square_error(D_test, Y_test, analytical_w)
     print("The learned weight vector: ", analytical_w)
     print("Test data cost function value: ", test_cost_value)
