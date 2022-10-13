@@ -125,10 +125,7 @@ def main():
     print("Learned weight vector: ", SGD_Weights)
     print("Test data cost function value: ", test_SGD_cost_value)
     #storing the results to csv
-    dict ={'Learnt Weights':GD_Weights, 'Learnt Weights':SGD_Weights}
-    #dict ={'Learnt Weights':SGD_Weights}
-    df=pd.DataFrame(dict)
-    df.to_csv('results.csv')
+   
 
     fig1 = plt.figure()
     plt.plot(SGD_costs)
@@ -136,8 +133,12 @@ def main():
     plt.xlabel('Iterations')
     plt.ylabel('J (Cost Function Value)')
     plt.show()
-    fig1.savefig("BGD_cost_function.png")
+    fig1.savefig("BGD_cost_functio.png")
 
+    dict ={'Learnt Weights':GD_Weights, 'Learnt Weights':SGD_Weights}
+    #dict ={'Learnt Weights':SGD_Weights}
+    df=pd.DataFrame(dict)
+    df.to_csv('results.csv')
     print("********** Part 4(c)  Optimal weight vector with analytical form**********")
 
     #multiply X and Y
