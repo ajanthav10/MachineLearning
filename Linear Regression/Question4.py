@@ -141,13 +141,10 @@ def main():
 
     #multiply X and Y
     #print(Y_train.shape)
-    #multiplication of X and X.T
-    XX=np.matmul(D_train,D_train.T)
-    inv_XX=inv(XX)
-    temp=np.matmul(inv_XX.T,D_train)
-    print(temp.shape)
-    print(Y_train.shape)
-    analytical_w=np.matmul(temp.T,Y_train)
+    #multiplication of X and X.Tnew_D_train = D_train.T
+    XX = np.matmul(D_train.T, D_train)
+    inv_XX = inv(XX)
+    analytical_w = np.matmul(np.matmul(inv_XX, D_train.T), Y_train)
     test_cost_value = mean_square_error(D_test, Y_test, analytical_w)
     print("The learned weight vector: ", analytical_w)
     print("Comparing learned weights by Gradient Descent, Stochastic GD with Optimal weights",GD_Weights-analytical_w,SGD_Weights-analytical_w)
