@@ -106,8 +106,7 @@ def main():
     print("Learning rate: ", r)
     print("GD_Learned weight vector: ", GD_Weights)
     print("Test data cost function value: ", test_GD_cost_value)
-
-
+    dict={"GD Learnt Weight": GD_Weights}
     fig1 = plt.figure()
     plt.plot(GD_costs)
     fig1.suptitle('Batch Gradient Descent on Test data')
@@ -118,24 +117,23 @@ def main():
 
     print("********** Part 4(b) - Implementing stochastic_gradient_descent **********")
     lr = args.lr
-    print(lr)
+    #print(lr)
     SGD_Weights, SGD_costs = stochastic_gradient_descent(D_train, Y_train,lr,10e-10)
     test_SGD_cost_value = mean_square_error(D_test, Y_test, SGD_Weights)
     print("Learning rate: ", lr)
-    print("Learned weight vector: ", SGD_Weights)
+    print("Learned weight vector: ",SGD_Weights)
     print("Test data cost function value: ", test_SGD_cost_value)
     #storing the results to csv
    
 
     fig1 = plt.figure()
     plt.plot(SGD_costs)
-    fig1.suptitle('Batch Gradient Descent on Test data')
+    fig1.suptitle('Stochastic Gradient Descent on Test data')
     plt.xlabel('Iterations')
     plt.ylabel('J (Cost Function Value)')
     plt.show()
-    fig1.savefig("BGD_cost_functio.png")
-
-    dict ={'Learnt Weights':GD_Weights, 'Learnt Weights':SGD_Weights}
+    fig1.savefig("Stochastic_cost_functio.png")
+    dict.__setitem__('SGD_Learnt Weights',SGD_Weights)
     #dict ={'Learnt Weights':SGD_Weights}
     df=pd.DataFrame(dict)
     df.to_csv('results.csv')
