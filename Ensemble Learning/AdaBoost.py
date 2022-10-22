@@ -127,7 +127,7 @@ def main():
     stump_err_train = obj_adaboost.error  
     err_AdaTest = apply_adaBoost(obj_adaboost, test)
     stump_err_test = obj_adaboost.error
-    f,(ax1,ax2) = plt.subplots(1,2,figsize=(10, 20))
+    f,(ax1,ax2) = plt.subplots(1,2,figsize=(25, 10))
     ax1.plot(err_AdaTrain, 'b')
     ax1.plot(err_AdaTest, 'r')  
     ax1.legend(['train', 'test'])
