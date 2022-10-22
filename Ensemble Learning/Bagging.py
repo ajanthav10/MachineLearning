@@ -105,7 +105,7 @@ def main():
     err_bag_test = apply_bagging(obj_bagging, test)
     f,(ax1) = plt.subplots(figsize=(10,5))
     ax1.plot(err_bag_train, 'blue')
-    ax1.plot(err_bag_test, 'green')  
+    ax1.plot(err_bag_test, 'red')  
     ax1.legend(['train', 'test'])
     ax1.set_title('bagging')
     ax1.set_xlabel('Number of Trees', fontsize=18)
