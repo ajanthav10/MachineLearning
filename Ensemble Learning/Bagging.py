@@ -3,15 +3,13 @@ from new_ID3 import * #importing the Decision tree
 import pandas as pd
 import matplotlib.pyplot as plt # to plot the figure
 import argparse
-
+#runns for a very long time 
 class Bagging:
     """
     creating bagging ensemble learning algorithm by picking m' samples with replacement
     """
     def __init__(self, m, T, data, numerical=False, key=None): 
-                 #randForest=False, Gsize=6, verbose=True, 
-                 #global_override=False, globaldf = None):
-        self.mp = m
+        self.samples = m
         self.T = T
         self.data = data
         self.error = np.zeros((T,))
@@ -21,27 +19,24 @@ class Bagging:
         self.key = key
         
     def sample_draw(self):
-        idx = np.random.choice(np.arange(len(self.data)), self.mp)
+        idx = np.random.choice(np.arange(len(self.data)), self.samples)
         return self.data.iloc[list(idx)]
     
     
     def plurality(self, tree_init, t, numerical=False):
         obj_tree = applyTree(self.data, tree_init, 
                              numerical=numerical)
-        h_t, total_error = apply_ID3(obj_tree)
+        h_t, total_error = predict_ID3(obj_tree)
         self.error[t] = total_error
         self.alpha[t] = 0.5*np.log((1 - total_error)/total_error)
-    '''
-    def _map2posneg(self, h, key):
-        h_mapped = [key[i] for i in h]
-        return np.array(h_mapped) '''   
+      
 
     def predict(self, data):
         predicts = []
         for t in range(self.T):
             applyInit = applyTree(data, self.treesInit[t],
                                   numerical=self.numerical)
-            apply_ID3(applyInit)
+            predict_ID3(applyInit)
             predicts.append(applyInit.predict)   
         return predicts  
    
@@ -98,7 +93,7 @@ def main():
         #print(train.shape)
         test=data.iloc[24000:30001,:]
         #print(test.shape)
-    T =50  
+    T =500  
     key = {'no': -1, 'yes': 1}
     m = 1000
     obj_bagging = Bagging(m, T, train, numerical=True, key=key)
@@ -109,8 +104,8 @@ def main():
     
     err_bag_test = apply_bagging(obj_bagging, test)
     f,(ax1) = plt.subplots(figsize=(10,5))
-    ax1.plot(err_bag_train, 'b')
-    ax1.plot(err_bag_test, 'r')  
+    ax1.plot(err_bag_train, 'blue')
+    ax1.plot(err_bag_test, 'green')  
     ax1.legend(['train', 'test'])
     ax1.set_title('bagging')
     ax1.set_xlabel('Number of Trees', fontsize=18)

@@ -32,7 +32,7 @@ class AdaBoost:
         #creating the object for applytree to apply Dt to test data
         obj_tree = applyTree(self.data, stump_init, weights=D, 
                              numerical=numerical)
-        h_t, total_error = apply_ID3(obj_tree)
+        h_t, total_error = predict_ID3(obj_tree)
         self.w_error[t] = total_error
         self.error[t] = 1 - sum(h_t)/len(h_t)
         self.alpha[t] = 0.5*np.log((1 - total_error)/(total_error)) 
@@ -49,11 +49,11 @@ class AdaBoost:
         predicts = []
         for t in range(self.T):
             tree_init = self.weak_learner[t]
-            
+                
             applyInit = applyTree(data, tree_init, 
-                               weights=tree_init.weights, 
-                               numerical=True)
-            apply_ID3(applyInit)
+                                weights=tree_init.weights, 
+                                numerical=True)
+            predict_ID3(applyInit)
             predicts.append(applyInit.predict)
         print('Finished Applying adaboost on Test set \n')
         return predicts
@@ -63,13 +63,14 @@ def train_adaboost(self):
     print('training the dataset for adaboost....')
     for t in range(self.T):
         decision_stump = decisionTree(self.data, numerical=True, 
-                                      depth=self.depth, weights=D)
+                                        depth=self.depth, weights=D)
         run_ID3(decision_stump)
         self.weak_learner.append(decision_stump)
         h_t = self.plurality(decision_stump, t, D, numerical=True)
         new_D = self.weight_update(D, t, h_t)
         D = new_D   
     print('Adaboost training completed!\n')
+
    
     
 def apply_adaBoost(self, data:pd.DataFrame):
@@ -128,19 +129,19 @@ def main():
     err_AdaTest = apply_adaBoost(obj_adaboost, test)
     stump_err_test = obj_adaboost.error
     f,(ax1,ax2) = plt.subplots(1,2,figsize=(25, 10))
-    ax1.plot(err_AdaTrain, 'b')
-    ax1.plot(err_AdaTest, 'r')  
+    ax1.plot(err_AdaTrain, color='blue')
+    ax1.plot(err_AdaTest, color='green')  
     ax1.legend(['train', 'test'])
     ax1.set_title('First Figure')
     ax1.set_xlabel('Iteration', fontsize=8)
     ax1.set_ylabel('Error Rate', fontsize=8)
     
-    ax2.plot(stump_err_train, 'b')
-    ax2.plot(stump_err_test, 'r')  
+    ax2.plot(stump_err_train, color='blue')
+    ax2.plot(stump_err_test, color='green')  
     ax2.legend(['train', 'test'])
     ax2.set_title('Second Figure')
-    ax2.set_xlabel('Iteration', fontsize=8)
-    ax2.set_ylabel('Error Rate', fontsize=8)
+    ax2.set_xlabel('Iteration', fontsize=14)
+    ax2.set_ylabel('Error Rate', fontsize=14)
     f.savefig('adaboost.png') 
    
 
