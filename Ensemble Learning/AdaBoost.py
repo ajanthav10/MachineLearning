@@ -108,11 +108,11 @@ def main():
                 'PAY_4','PAY_5','PAY_6','BILL_AMT1','BILL_AMT2','BILL_AMT3','BILL_AMT4',
                 'BILL_AMT5','BILL_AMT6','PAY_AMT1','PAY_AMT2','PAY_AMT3','PAY_AMT4',
                 'PAY_AMT5','PAY_AMT6','default payment next month']					
-        data = pd.read_excel('credit/default of credit card clients.xls', names=cols,usecols="B:Y")
+        data = pd.read_csv('credit/credit.csv', names=cols,)
         #print(data.shape)
         #print(data)
         train=data.iloc[0:24000,:]
-        #print(train)
+        print(train)
         #print(train.shape)
         test=data.iloc[24000:30001,:]
         #print(test.shape)
@@ -127,21 +127,21 @@ def main():
     stump_err_train = obj_adaboost.error  
     err_AdaTest = apply_adaBoost(obj_adaboost, test)
     stump_err_test = obj_adaboost.error
-    f,(ax1,ax2) = plt.subplots(1,2)
+    f,(ax1,ax2) = plt.subplots(1,2,figsize=(10, 20))
     ax1.plot(err_AdaTrain, 'b')
     ax1.plot(err_AdaTest, 'r')  
     ax1.legend(['train', 'test'])
     ax1.set_title('First Figure')
-    ax1.set_xlabel('Iteration', fontsize=18)
-    ax1.set_ylabel('Error Rate', fontsize=16)
-    f.savefig('firstfig.png') 
+    ax1.set_xlabel('Iteration', fontsize=8)
+    ax1.set_ylabel('Error Rate', fontsize=8)
+    
     ax2.plot(stump_err_train, 'b')
     ax2.plot(stump_err_test, 'r')  
     ax2.legend(['train', 'test'])
     ax2.set_title('Second Figure')
-    ax2.set_xlabel('Iteration', fontsize=18)
-    ax2.set_ylabel('Error Rate', fontsize=16)
-    f.savefig('secondfig.png') 
+    ax2.set_xlabel('Iteration', fontsize=8)
+    ax2.set_ylabel('Error Rate', fontsize=8)
+    f.savefig('adaboost.png') 
    
 
 if __name__ == "__main__":

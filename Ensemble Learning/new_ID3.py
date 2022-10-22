@@ -31,8 +31,8 @@ class decisionTree:
     first instance of max info gain.  
     """
     def __init__(self, df, method='entropy', depth=None, randTieBreak=True, 
-                 numerical=False, weights=None, 
-                 small_sub=False, globaldf=None, randForest=False, Gsize=6):
+                 numerical=False, weights=None): 
+                 #small_sub=False, globaldf=None, randForest=False, Gsize=6):
         self.attributes = np.array(df.iloc[:,:-1]) # np array with columns as attributes
         self.attrNames = np.array(df.columns[:-1]) # attribute names
         self.labels = np.array(df.iloc[:,-1]) # np array of labels (target)
@@ -42,14 +42,16 @@ class decisionTree:
         self.media = None
         self.numerical_idx = []
         self.randPick = randTieBreak # pick random info gain attrName if tied 
-        
+        self.gainMethod = self._getEntropy
         # setting the gain method
+        '''
         if method == 'entropy':
             self.gainMethod = self._getEntropy
         elif method == 'ME':
             self.gainMethod = self._getME
         else:
             self.gainMethod = self._getGini
+            '''
         
         # setting the depth limit (0 < d <= # of attributes)
         if depth is None:
@@ -64,7 +66,7 @@ class decisionTree:
             self.weights = np.ones((len(self.attributes),))/len(self.attributes)    
         else:
             self.weights = weights
-        
+        '''
         if small_sub:
             self.small_sub = small_sub
             self.globaldf = np.array(globaldf.iloc[:,:-1])
@@ -73,7 +75,7 @@ class decisionTree:
             
         self.randForest = randForest
         self.Gsize = Gsize
-        self.tree = None
+        self.tree = None'''
         
     def _getEntropy(self, idx):
         """Calculates the entropy of a given list of indices of an attribute
@@ -101,7 +103,7 @@ class decisionTree:
         entropy = -(sum(ps*np.log2(ps)))
 
         return entropy    
-    
+    '''
     def _getME(self, idx):
         """Calculates the majority error of a given list of indices of an attribute
         
@@ -157,7 +159,7 @@ class decisionTree:
         gini = 1 - (np.sum(ps**2))
             
         return gini
-    
+    '''
     def _getInfoGain(self, idx, attrID):
         """Calculates the information gain of a single attribute        
         
@@ -250,8 +252,8 @@ class decisionTree:
             # print(self.media)
             self.numerical_idx.append(attr)
             self.attributes[:,attr] = self.attributes[:,attr] > median
-            if self.small_sub:
-                self.globaldf[:,attr] = self.globaldf[:,attr] > median
+            #if self.small_sub:
+                #self.globaldf[:,attr] = self.globaldf[:,attr] > median
     
     def _ID3Rec(self, idx, attrNames, node, prevMax=None):
         """function for the recursive part of ID3
@@ -320,10 +322,11 @@ class decisionTree:
         # print(bestAttr, bestAttridx)
         node.attribute = bestAttr
         node.children = []
-        if self.small_sub:
+        chosenAttrVals = list(set(self.attributes[:, bestAttridx]))
+        '''if self.small_sub:
             chosenAttrVals = list(set(self.globaldf[:, bestAttridx]))
         else:
-            chosenAttrVals = list(set(self.attributes[:, bestAttridx]))
+            chosenAttrVals = list(set(self.attributes[:, bestAttridx]))'''
         
         for val in chosenAttrVals: # for all vals the attr can take:
             # make new child node, append it to child list, update depth
