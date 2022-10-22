@@ -81,7 +81,7 @@ def IG_ME(data,attribute,label_name):
         weighted_m_err += counts[i]/np.sum(counts)*ME(sub_data[label_name])
     
     IG = total_m_err - weighted_m_err
-
+    print(IG)
     return IG
     
 def IG_GI(data,attribute,label_name):
@@ -162,10 +162,13 @@ def ID3_depth_ME(depth, data,X_features,label):
     else:    
         for f in X_features:
             item_values=[ IG_ME(data,f,label) for f in X_features]
-
+        
+        
+        #print(item_values)
         best_attribute_index = np.argmax(item_values)
         best_attribute = X_features[best_attribute_index]
         
+        print(best_attribute)
         tree = {best_attribute:{}}
 
         for value in np.unique(data[best_attribute]):
@@ -267,11 +270,11 @@ def main():
         
     print("Majority Error")
     print("--------------------------------------------------")
-    for i in range(6):
-        tree=ID3_depth_ME(i+1, data, X_features,"labels")
-        training_err=1- test(data,Training_Label,tree)
-        testing_err =1- test(test_data,Test_Label,tree)
-        print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
+    #depth=6
+    tree=ID3_depth_ME(6, data, X_features,"labels")
+    training_err=1- test(data,Training_Label,tree)
+    testing_err =1- test(test_data,Test_Label,tree)
+    print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
     print("Gini Index")
     print("--------------------------------------------------")
     for i in range(6):

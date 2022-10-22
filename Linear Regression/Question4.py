@@ -145,6 +145,7 @@ def main():
     XX = np.matmul(D_train.T, D_train)
     inv_XX = inv(XX)
     analytical_w = np.matmul(np.matmul(inv_XX, D_train.T), Y_train)
+    print(analytical_w.shape)
     test_cost_value = mean_square_error(D_test, Y_test, analytical_w)
     print("The learned weight vector: ", analytical_w)
     diffweight_GD = LA.norm(analytical_w - GD_Weights)

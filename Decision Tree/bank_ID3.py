@@ -278,7 +278,7 @@ def main():
     print("-----Problem 3a-------")
     print("Information Gain")
     print("--------------------------------------------------")
-    for i in range(16):
+    for i in range(1):
         tree=ID3_depth_entropy(i+1, data, Attributes,"Label")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
@@ -286,14 +286,14 @@ def main():
         
     print("Majority Error")
     print("--------------------------------------------------")
-    for i in range(16):
+    for i in range(1):
         tree=ID3_depth_ME(i+1, data, Attributes,"Label")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
         print("The depth =", i+1, "and training error = ","{:.3f}".format(training_err) ,"and testing error =" ,"{:.3f}".format(testing_err))
     print("Gini Index")
     print("--------------------------------------------------")
-    for i in range(16):
+    for i in range(1):
         tree=ID3_depth_GI(i+1, data, Attributes,"Label")
         training_err=1- test(data,Training_Label,tree)
         testing_err =1- test(test_data,Test_Label,tree)
