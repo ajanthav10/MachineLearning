@@ -1,6 +1,7 @@
 #importing libraries
 import pandas as pd
 import numpy as np
+import csv
 
 '''DATA PREPROCESSING
 INPUT- training and testing data
@@ -73,8 +74,8 @@ def avg_perceptron(X,Y,r,t):
         
         #print("for epoch")
         print("For epoch {} ,the training error is {}".format((a+1), error))
-    print(count)
-    avg_weight=avg_weight/count
+    #print(count)
+    #avg_weight=avg_weight/count
     print("Learnt Weight is",avg_weight)
     return avg_weight
 
@@ -88,8 +89,9 @@ def avg_predict(X_test,Y_test,avg_weight):
 
 def voted_perceptron(X,Y,r,t):
     num_records, num_features = X.shape
-    weight = np.append(np.zeros(num_features-1),1)
+    weight = [np.append(np.zeros(num_features-1),1)]
     m=0
+    C=[0]
     for a in range(t):
         indices = np.arange(Y.shape[0])
         np.random.shuffle(indices)
@@ -98,35 +100,43 @@ def voted_perceptron(X,Y,r,t):
         for i in range(num_records):
             xi = Xshuff[i,:]
             yi = yshuff[i]
-            if (yi*(np.dot(weight, xi)) <= 0):
-                weight = weight + r * (yi*xi)
-                W.append(weight)
+            if (yi*(np.dot(weight[m], xi)) <= 0):
+                weight[m] += r * (yi*xi)
+                weight.append(weight[m].copy())
                 m=m+1
-                C.append(m)
+                C.append(1)
             else:
-                C.append(m+1)
-            y_pred=np.sign(np.dot(X, weight))
-            correct_pred=np.sum(y_pred==Y)
-            print("For epoch {} ,the weight and no of correctly predicted examples {}".format((a+1),weight,correct_pred))
-
+                C[m]+=1
+    votes = np.array(list(zip(weight, C)), dtype=object)
+    with open('weights.csv', 'w', newline='') as f:
+        wrt = csv.writer(f)
+        wrt.writerow(['b', 'x1', 'x2', 'x3', 'x4', 'C'])
+        for w in votes:
+            row = w[0]
+            row = np.append(row, w[1])
+            wrt.writerow(row)
     #print(len(W),len(C))
     #print(W)
     #return (W, C,weight)
-    return weight
+    return votes
 
-def voted_predict(X_test,Y_test,weight):
-    y_pred=np.sign(np.dot(X_test, weight))
-    error=np.sum(y_pred!=Y_test) / Y_test.shape[0]
-    print("Testing Error is",error)
+def voted_predict(X,Y,votes):
+    y_pred=np.zeros(len(Y))
+    for a in range(len(Y)):
+        i=0
+        for w,c in votes:
+            i+=c*np.sign(np.dot(w,X[a]))
+        y_pred[a]=np.sign(i)
+    error=np.sum(y_pred!=Y) / Y.shape[0]
+    print("Error is",error)
 
 
 
 
 print("__________Training Voted perceptron________________")
-W=[]
-C=[]
-voted_weight=voted_perceptron(X_train, Y_train, r=0.01,t=10)
-voted_predict(X_test,Y_test,voted_weight)
+votes=voted_perceptron(X_train, Y_train, r=0.01,t=10)
+voted_predict(X_train,Y_train,votes)
+voted_predict(X_test,Y_test,votes)
 
 
 print("__________Training Standard perceptron________________")
@@ -137,33 +147,3 @@ print("__________Training Average perceptron________________")
 avg_weight=avg_perceptron(X_train, Y_train, r=0.01,t=10)
 avg_predict(X_test,Y_test,avg_weight)
 
-exit()
-def voted_predict(X_test,Y_test,weight,c):
-    num_examples, num_features = X_test.shape
-    pred_sum = np.zeros_like(num_examples)
-    for i in range(c.shape[0]):
-        current_pred = np.sign(np.dot(X_test,weight[i,:])+1)
-        pred_sum = pred_sum +c[i] * current_pred
-    return np.sign(pred_sum)
-
-    pred_f = []
-    for j in range(len(teX)):
-        pred = []
-        for i in range(1, len(W1)):
-            pred.append(C[i] * np.sign(W1[i].T.dot(teX[j])))
-            pred_f.append(np.sign(sum(pred)))
-    test['pred'] = pred_f
-    err_test += len(test[test['pred'] != test['label']]) / len(test)
-
-
-def calculate_correct_examples(y_pred, y):
-    """ Get count of correctly predicted labels.
-
-    Args:
-        y_pred (ndarray): Binary (1 or -1) predicted label data. A m shape 1D numpy array where m is the number of examples.
-        y (ndarray): Binary (1 or -1) ground truth label data. A m shape 1D numpy array where m is the number of examples. 
-
-    Returns:
-        int: Count of correctly predicted labels.
-    """
-    return np.sum(y_pred==y)
