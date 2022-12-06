@@ -136,6 +136,7 @@ def voted_predict(X,Y,votes):
 print("__________Training Voted perceptron________________")
 votes=voted_perceptron(X_train, Y_train, r=0.01,t=10)
 voted_predict(X_train,Y_train,votes)
+print("_______testing Voted perceptron__________")
 voted_predict(X_test,Y_test,votes)
 
 
