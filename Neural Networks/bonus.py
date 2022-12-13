@@ -1,4 +1,4 @@
-references :-https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html
+#references :-https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html
 #https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html
 #https://towardsdatascience.com/build-a-simple-neural-network-using-pytorch-38c55158028d
 #https://towardsdatascience.com/building-neural-network-using-pytorch-84f6e75f9a
