@@ -26,11 +26,10 @@ def predict(x,y,w)->float:
     error=np.sum(np.abs(y_pred - np.reshape(y,(-1,1)))) / 2 / y.shape[0]
     return error
 
-def train_MAP(x,y)->np.ndarray:
+def train(x,y,bool)->np.ndarray:
     lr=0.01
     d=0.1
     epoch=100
-    #gamma=0.1
     v=1
     num_sample = x.shape[0]
     dim = x.shape[1]
@@ -43,30 +42,12 @@ def train_MAP(x,y)->np.ndarray:
         for i in range(num_sample):
             x_i = x[i,:].reshape([1, -1])
             tmp = y[i] * np.sum(np.multiply(w, x_i))
-            g = - num_sample * y[i] * x_i / (1 + np.exp(tmp)) + w /v
+            if bool==True:
+                g = - num_sample * y[i] * x_i / (1 + np.exp(tmp)) + w /v
+            else :
+                g = - num_sample * y[i] * x[i,:] / (1 + np.exp(tmp))
             # print(g)
             lr = lr / (1 +lr /d * t)
-            w = w - lr * g
-    return w.reshape([-1,1])
-    
-def train_ML(x,y)->np.ndarray:
-    lr=0.01
-    d=0.1
-    epoch=100
-    #gamma=0.1
-    v=1
-    num_sample = x.shape[0]
-    dim = x.shape[1]
-    w = np.zeros([1, dim])
-    idx = np.arange(num_sample)
-    for t in range(epoch):
-        np.random.shuffle(idx)
-        x = x[idx,:]
-        y = y[idx]
-        for i in range(num_sample):
-            tmp = y[i] * np.sum(np.multiply(w, x[i,:]))
-            g = - num_sample * y[i] * x[i,:] / (1 + np.exp(tmp))
-            lr = lr / (1 + lr / d * t)
             w = w - lr * g
     return w.reshape([-1,1])
 
@@ -74,15 +55,14 @@ def main():
     v_list = [0.01, 0.1, 0.5, 1, 3, 5, 10, 100]
     print("______________________________Question3a__________________________________")
     for v in v_list:
-        #model.set_v(v)
-        w= train_MAP(X_train, Y_train)
+        w= train(X_train, Y_train,bool=True)
         train_error= predict (X_train,Y_train,w)
         test_error= predict (X_test,Y_test,w)
         print("Variance:",v,'train_error: ', train_error, ' test_error: ', test_error)
     print("______________________________Question3b__________________________________")
     for v in v_list:
 
-        weight= train_ML(X_train, Y_train)
+        weight= train(X_train, Y_train,bool=False)
         train_error= predict (X_train,Y_train,weight)
         test_error= predict (X_test,Y_test,weight)
         print("Variance:",v,'train_error: ', train_error, ' test_error: ', test_error)
